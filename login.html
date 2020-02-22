@@ -1,0 +1,36 @@
+<html>
+<head>
+  <title>Firebase Login</title>
+  <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
+  <link rel="stylesheet" href="css/login.css" />
+</head>
+<body>
+
+  <div id="login_div" class="main-div">
+    <h3>Firebase Web login Example</h3>
+    <input type="email" placeholder="Email..." id="email_field" />
+    <input type="password" placeholder="Password..." id="password_field" />
+
+    <button onclick="login()">Login to Account</button>
+  </div>
+  
+  <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase.js"></script>   
+<script>   
+   const firebaseConfig = {
+  apiKey: "AIzaSyCrxpBSnbxGQ5Htkxsh6BLnyjxhHTvfKdM",
+  authDomain: "web-project-12345.firebaseapp.com",
+  databaseURL: "https://web-project-12345.firebaseio.com",
+  projectId: "web-project-12345",
+  storageBucket: "web-project-12345.appspot.com",
+  messagingSenderId: "797401562503",
+  appId: "1:797401562503:web:3a2c7949233f565a62e722",
+  measurementId: "G-B2NCF39XYP"
+};
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    </script>   
+
+  <script src="js/login.js"></script>
+
+</body>
+</html>

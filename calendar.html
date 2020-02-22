@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta charset='utf-8' />
+      <link href='calendar/packages/core/main.css' rel='stylesheet'/>
+      <link href='calendar/packages/timegrid/main.css' rel='stylesheet'/>
+      <script src='calendar/packages/core/main.js'></script>      
+      <script src='calendar/packages/core/locales/he.js'></script>
+      <script src='calendar/packages/interaction/main.js'></script>
+      <script src='calendar/packages/daygrid/main.js'></script>
+      <script src='calendar/packages/timegrid/main.js'></script>
+      
+       <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-app.js"></script>
+       <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-database.js"></script>
+      <script>
+       const firebaseConfig = {
+  apiKey: "AIzaSyCrxpBSnbxGQ5Htkxsh6BLnyjxhHTvfKdM",
+  authDomain: "web-project-12345.firebaseapp.com",
+  databaseURL: "https://web-project-12345.firebaseio.com",
+  projectId: "web-project-12345",
+  storageBucket: "web-project-12345.appspot.com",
+  messagingSenderId: "797401562503",
+  appId: "1:797401562503:web:3a2c7949233f565a62e722",
+  measurementId: "G-B2NCF39XYP"
+};
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+      function logout(){
+  firebase.auth().signOut();
+     window.location.replace("login.html");
+}
+      </script>
+      
+      <script>
+         
+         document.addEventListener('DOMContentLoaded', function() {
+         var initialLocaleCode = 'en';
+         var localeSelectorEl = document.getElementById('locale-selector');
+         var calendarEl = document.getElementById('calendar');
+         
+         var calendar = new FullCalendar.Calendar(calendarEl, {
+         plugins: [ 'interaction', 'timeGrid'  ],
+         locale: initialLocaleCode,
+         
+         //set the calender properties
+         contentHeight:600,
+         slotDuration: '00:05:00',
+         defaultTimedEventDuration: '00:15:00',
+         forceEventDuration: true,
+         minTime:'15:00:00',
+         maxTime:'20:00:00',
+         allDaySlot:false, 
+         
+         //remove event
+         eventClick: function(info) {
+            if(confirm("Remove event?"))
+            info.event.remove();
+         }          
+      });//calendar
+      
+      calendar.render();
+      
+      // build the locale selector's options
+      calendar.getAvailableLocaleCodes().forEach(function(localeCode) {
+         var optionEl = document.createElement('option');
+         optionEl.value = localeCode;
+         optionEl.selected = localeCode == initialLocaleCode;
+         optionEl.innerText = localeCode;
+         localeSelectorEl.appendChild(optionEl);
+      });
+      
+      // when the selected option changes, dynamically change the calendar option
+      localeSelectorEl.addEventListener('change', function() {
+         if (this.value) {
+            calendar.setOption('locale', this.value);            
+         }
+      });
+      
+      
+      //add event on click
+      calendar.on('dateClick', function(clickedOn) {
+         let da=new Date(clickedOn.dateStr);
+         da.setMinutes(da.getMinutes()- da.getMinutes()%15);
+         for(event of  calendar.getEvents()){            
+            if(da.getTime()==event.start.getTime())
+            {            
+             return;
+            }
+         } 
+         calendar.addEvent({ title: 'Teacher meeting', start:da});
+      });      
+   });//addEventListener   
+</script>
+
+<style>   
+   *{
+   font-family: Arial;
+   font-size: 16px;
+   text-align: center;
+   } 
+   
+   .fc-time-grid .fc-slats td {
+   height: 1em; // Changes timeslot to your required height
+   border-bottom: 0;
+   
+   }
+   
+   #top{
+   background-color:lightblue;
+   width:fit-content;		
+   padding:5px;
+   }   
+</style>
+<div id='top'>
+    <button onclick="logout()">Logout</button>
+
+    Languages:
+   
+   <select id='locale-selector'></select>	
+</div>
+</head>
+<body>
+   <div id='calendar-container'>
+      <div id='calendar'></div>
+   </div> 
+ 
+</body>
+</html>
