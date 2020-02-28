@@ -36,10 +36,7 @@ function init(){
 			maxTime:'20:00:00',
 			allDaySlot:false,		
 			hiddenDays: [ 5,6 ], // hide Fridays and Saturdays
-			
-		 events: function(info, successCallback, failureCallback) {
-			 
-		 }
+	
 			
 			//remove event on click
 			eventClick: function(info) {
