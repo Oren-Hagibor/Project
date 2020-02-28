@@ -37,6 +37,10 @@ function init(){
 			allDaySlot:false,		
 			hiddenDays: [ 5,6 ], // hide Fridays and Saturdays
 			
+		 events: function(info, successCallback, failureCallback) {
+			 
+		 }
+			
 			//remove event on click
 			eventClick: function(info) {
 				firebase.auth().onAuthStateChanged(function(user) {
@@ -83,7 +87,7 @@ function init(){
 				}
 			} 
 			writeUserData(firebase.auth().currentUser.email,da); 
-			calendar.addEvent({ title: 'Teacher meeting', start:da,groupId:firebase.auth().currentUser.email});
+			calendar.addEvent({ title: firebase.auth().currentUser.email, start:da,groupId:firebase.auth().currentUser.email});
 		});      
 	});//addEventListener   
 }
