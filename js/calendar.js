@@ -14,23 +14,17 @@ function init(){
 	//Initialize Firebase
 	firebase.initializeApp(firebaseConfig);
 	
-	//firebase.database().ref('/Meetings/').once('value').then(function (snapshot) {
-	//      Meetings = snapshot.val();
-	//  });
 	firebase.auth().onAuthStateChanged(function(user) {
 		if (!user) {    // No user is signed in.
 			window.location.replace("login.html");
 		}         
 	});
 	var database = firebase.database();
-	//var user=firebase.auth().currentUser;
 	
 	document.addEventListener('DOMContentLoaded', function() {
 		var initialLocaleCode = 'en';
 		var localeSelectorEl = document.getElementById('locale-selector');
-		var calendarEl = document.getElementById('calendar');
-		
-		
+		var calendarEl = document.getElementById('calendar');		
 		
 		var calendar = new FullCalendar.Calendar(calendarEl, {
 			plugins: [ 'interaction', 'timeGrid'  ],
@@ -43,7 +37,7 @@ function init(){
 			forceEventDuration: true,
 			minTime:'15:00:00',
 			maxTime:'20:00:00',
-			allDaySlot:false,
+			allDaySlot:false,		
 			hiddenDays: [ 5,6 ], // hide Fridays and Saturdays
 			
 			//remove event on click

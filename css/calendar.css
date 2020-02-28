@@ -1,0 +1,17 @@
+   *{
+   font-family: Arial;
+   font-size: 16px;
+   text-align: center;
+   } 
+   
+   .fc-time-grid .fc-slats td {
+   height: 1em;
+   border-bottom: 0;
+   
+   }
+   
+   #top{
+   background-color:lightblue;
+   width:fit-content;		
+   padding:5px;
+   }   
