@@ -32,19 +32,3 @@ function login(){
     // ...
   });
 }
-
-function initDataBase() {
-
-
-    // Initialize Firebase
-    firebase.database().ref('/student/').once('value').then(function (snapshot) {
-        studentList = snapshot.val();
-    });
-    firebase.database().ref('/teacher/').once('value').then(function (snapshot) {
-        teacherList = snapshot.val();
-    });
-    firebase.database().ref('/hour/').once('value').then(function (snapshot) {
-        startTime = snapshot.val().start;
-        endTime = snapshot.val().end;
-    });
-}
