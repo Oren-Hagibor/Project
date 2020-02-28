@@ -12,87 +12,8 @@
       <script src='calendar/packages/daygrid/main.js'></script>
       <script src='calendar/packages/timegrid/main.js'></script>
 		<script src="https://www.gstatic.com/firebasejs/7.9.1/firebase.js"></script>   
-		
       <script>
-			init();
-			firebase.auth().onAuthStateChanged(function(user) {
-				if (!user) {    // No user is signed in.
-					window.location.replace("login.html");
-				}         
-			});
-			var database = firebase.database();
-			var user=firebase.auth().currentUser;
-			function logout(){
-				firebase.auth().signOut();
-				window.location.replace("login.html");
-			}
-         document.addEventListener('DOMContentLoaded', function() {
-				var initialLocaleCode = 'en';
-				var localeSelectorEl = document.getElementById('locale-selector');
-				var calendarEl = document.getElementById('calendar');
-				
-				
-				
-				var calendar = new FullCalendar.Calendar(calendarEl, {
-					plugins: [ 'interaction', 'timeGrid'  ],
-					locale: initialLocaleCode,
-					
-					//set the calender properties
-					contentHeight:600,
-					slotDuration: '00:05:00',
-					defaultTimedEventDuration: '00:15:00',
-					forceEventDuration: true,
-					minTime:'15:00:00',
-					maxTime:'20:00:00',
-					allDaySlot:false,
-					hiddenDays: [ 5,6 ], // hide Fridays and Saturdays
-					
-					//remove event on click
-					eventClick: function(info) {
-						if(info.event.groupId==firebase.auth().currentUser.email){
-							if(confirm("Remove the meeting?"))
-							info.event.remove();
-							deleteUserData(user.email,event.start)
-						}
-						else{
-							window.alert("That meeting does not belong to you");
-						}
-					}
-					
-				});//calendar
-				
-				calendar.render();
-				
-				// build the locale selector's options
-				calendar.getAvailableLocaleCodes().forEach(function(localeCode) {
-					var optionEl = document.createElement('option');
-					optionEl.value = localeCode;
-					optionEl.selected = localeCode == initialLocaleCode;
-					optionEl.innerText = localeCode;
-					localeSelectorEl.appendChild(optionEl);
-				});
-				
-				// when the selected option changes, dynamically change the calendar option
-				localeSelectorEl.addEventListener('change', function() {
-					if (this.value) {
-						calendar.setOption('locale', this.value);            
-					}
-				});
-				
-				//add event on click
-				calendar.on('dateClick', function(clickedOn) {
-					let da=new Date(clickedOn.dateStr);
-					da.setMinutes(da.getMinutes()- da.getMinutes()%15);
-					for(event of  calendar.getEvents()){ 
-						if(da.getTime()==event.start.getTime())
-						{ 
-							return;
-						}
-					} 
-					writeUserData(firebase.auth().currentUser.email,da); 
-					calendar.addEvent({ title: 'Teacher meeting', start:da,groupId:firebase.auth().currentUser.email});
-				});      
-			});//addEventListener   
+			init();			
 		</script>
 		
 		<div id='top'>
@@ -106,7 +27,6 @@
 	<body>
 		<div id='calendar-container'>
 			<div id='calendar'></div>
-		</div> 
-		
+		</div>		
 	</body>
 </html>			
