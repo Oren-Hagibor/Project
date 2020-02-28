@@ -14,6 +14,7 @@ function init(){
 	//Initialize Firebase
 	firebase.initializeApp(firebaseConfig);
 	
+	//Check if user is already signed in
 	firebase.auth().onAuthStateChanged(function(user) {
 		if (!user) {    // No user is signed in.
 			window.location.replace("login.html");
@@ -21,17 +22,13 @@ function init(){
 	});
 	var database = firebase.database();
 	
-	document.addEventListener('DOMContentLoaded', function() {
-		var initialLocaleCode = 'en';
-		var localeSelectorEl = document.getElementById('locale-selector');
-		var calendarEl = document.getElementById('calendar');		
-		
-		var calendar = new FullCalendar.Calendar(calendarEl, {
+	document.addEventListener('DOMContentLoaded', function() {		
+		var calendarElement = document.getElementById('calendar');		
+		var calendar = new FullCalendar.Calendar(calendarElement, {
 			plugins: [ 'interaction', 'timeGrid'  ],
-			locale: initialLocaleCode,
-			
 			//set the calender properties
-			contentHeight:600,
+			locale: 'en',		
+			contentHeight: 600,
 			slotDuration: '00:05:00',
 			defaultTimedEventDuration: '00:15:00',
 			forceEventDuration: true,
@@ -47,24 +44,23 @@ function init(){
 						if(info.event.groupId==firebase.auth().currentUser.email){
 							if(confirm("Remove the meeting?"))
 							info.event.remove();
-							deleteUserData(user.email,event.start)
+							deleteUserData(user.email,new Date(info.event.start));
 						}
 						else{
 							window.alert("That meeting does not belong to you");
 						}
 					}         
 				});
-			}
-			
-		});//calendar
-		
+			}			
+		});//calendar		
 		calendar.render();
 		
+		var localeSelectorEl = document.getElementById('locale-selector');
 		// build the locale selector's options
 		calendar.getAvailableLocaleCodes().forEach(function(localeCode) {
 			var optionEl = document.createElement('option');
 			optionEl.value = localeCode;
-			optionEl.selected = localeCode == initialLocaleCode;
+			optionEl.selected = localeCode == 'en';
 			optionEl.innerText = localeCode;
 			localeSelectorEl.appendChild(optionEl);
 		});
@@ -74,7 +70,7 @@ function init(){
 			if (this.value) {
 				calendar.setOption('locale', this.value);            
 			}
-		});
+		});		
 		
 		//add event on click
 		calendar.on('dateClick', function(clickedOn) {
@@ -91,20 +87,23 @@ function init(){
 		});      
 	});//addEventListener   
 }
+
 function logout(){
 	firebase.auth().signOut();
 	window.location.replace("login.html");
 }
+
 function writeUserData(userEmail,meeting) {
-	var name=userEmail.substring(0, userEmail.indexOf("@"));
-	// A post entry.
-	
+	var name=userEmail.substring(0, userEmail.indexOf("@"));	
 	var updates = {};
 	updates[name+'/'+meeting.toDateString()+'/'+meeting.toTimeString()]= "meeting";
 	
 	return firebase.database().ref().update(updates);
 }
 
-function deleteUserData(){
-	
+function deleteUserData(userEmail,meeting){
+	var name=userEmail.substring(0, userEmail.indexOf("@"));	
+	var updates = {};
+	updates[name+'/'+meeting.toDateString()+'/'+meeting.toTimeString()]= null;	
+	return firebase.database().ref().update(updates);
 }
