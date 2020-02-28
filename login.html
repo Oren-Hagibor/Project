@@ -4,18 +4,28 @@
   <title>Student Login</title>
   <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
   <link rel="stylesheet" href="css/login.css" />
+
 </head>
 
 <body>
-  <div class="fadeInDown">
-    <div id="login_div" class="main-div">
-      <h3>Student Login</h3>
-      <input type="email" placeholder="Email..." id="email_field" class="fadeIn secong" />
-      <input type="password" placeholder="Password..." id="password_field" class="fadeIn third" />
-      <button id="mybtn" onclick="login()" class="fadeIn fourth">Login to Account</button>
+  <div>
+    <div class="foo">
+      <span class="letter" data-letter="L">L</span>
+      <span class="letter" data-letter="O">O</span>
+      <span class="letter" data-letter="G">G</span>
+      <span class="letter" data-letter="I">I</span>
+      <span class="letter" data-letter="N">N</span>
+    </div>
+    <div class="fadeInDown">
+      <div id="login_div" class="main-div">
+        <input type="email" placeholder="Email..." id="email_field" class="fadeIn secong" />
+        <input type="password" placeholder="Password..." id="password_field" class="fadeIn third" />
+        <button id="mybtn" onclick="login()" class="fadeIn fourth">Login to Account</button>
+      </div>
     </div>
   </div>
-  <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.9.1/firebase-auth.js"></script>
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyCrxpBSnbxGQ5Htkxsh6BLnyjxhHTvfKdM",
