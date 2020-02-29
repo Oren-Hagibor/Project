@@ -1,17 +1,33 @@
-   *{
-   font-family: Arial;
+*{
    font-size: 16px;
    text-align: center;
-   } 
-   
-   .fc-time-grid .fc-slats td {
+   font-family: 'Nunito', sans-serif;
+} 
+
+.fc-time-grid .fc-slats td {  
    height: 1em;
    border-bottom: 0;
-   
-   }
-   
-   #top{
-   background-color:lightblue;
+}
+
+#top{
+   background-color:#272B30;
    width:fit-content;		
-   padding:5px;
-   }   
+   padding:20px;
+}   
+
+.radio-inline{
+   width:150px;
+   text-align: left;
+}
+
+.form-group{
+   text-align: left;
+}
+h5{
+   text-decoration: underline;
+   text-align: left;
+}
+.down-div{
+   margin-top: 75px;
+   margin-left: 10px;
+}
