@@ -1,11 +1,11 @@
-var eventArray=[];
-var dataArray=[];
+
 
 function init(){
 	initFirebase();
-	createDataArray();
-	createEventArray();
-	initCalendar();
+	var eventArray;
+	eventArray=createDataArray(createEventArray);
+	setTimeout(function(){ }, 3000);
+	initCalendar(eventArray);
 }
 
 function initFirebase(){
@@ -33,38 +33,43 @@ function initFirebase(){
 	
 }
 
-
-function createDataArray(){
+function createDataArray(callback){
+	var dataArray=[];
+	
 	var rootRef = firebase.database().ref();
 	rootRef.on('value', function(rootSnapshot) {
 		rootSnapshot.forEach(function(dateSnapshot) {
 			dateSnapshot.forEach(function(timeSnapshot) {
 				dataArray.push(timeSnapshot.val());
+				console.log(timeSnapshot.val())
 			})
 		});
 	});
+	//setTimeout(function(){	document.write(dataArray.length); }, 12000);
+
+	callback(dataArray);
 }
 
-function createEventArray(){
+function createEventArray(...dataArray){
+	var eventArray=[];
 	for (let i = 0; i < dataArray.length-1; i+=2) {
 		eventArray.push({
 			title: dataArray[0],
 			start: dataArray[1]
 		})
 	}
-	console.log(eventArray.length);
+	console.log("in ea"+eventArray.length);
+	return eventArray;
 }
 
-function initCalendar(){
-	console.log(eventArray.length);
+function initCalendar(...eventArray){
 	document.addEventListener('DOMContentLoaded', function() {		
 		var calendarElement = document.getElementById('calendar');	
-		console.log(eventArray.length);
 		var calendar = new FullCalendar.Calendar(calendarElement, {
 			
 			//set the calender properties
-			plugins: [ 'interaction', 'timeGrid','bootstrap'  ],
-			eventSources:eventArray,
+			plugins: [ 'interaction', 'timeGrid','bootstrap' ],
+			//eventSources:eventArray,
 			contentHeight: 600,
 			slotDuration: '00:05:00',
 			defaultTimedEventDuration: '00:15:00',
@@ -74,6 +79,8 @@ function initCalendar(){
 			allDaySlot:false,
 			themeSystem:'bootstrap',
 			hiddenDays: [ 5,6 ], // hide Fridays and Saturdays
+			titleFormat:{month:'long',year:'numeric'},
+			columnHeaderFormat:{weekday:'long',day:'2-digit',month:'2-digit'},
 			customButtons: {
 				logoutButton: {
 					text: 'Logout',
@@ -84,9 +91,9 @@ function initCalendar(){
 				}
 			},
 			header: {
-				left: 'logoutButton',
+				left: '',
 				center: 'title',
-				right: 'today prev,next'
+				right: 'today prev,next logoutButton'
 			},
 			
 			//remove event on click
@@ -121,11 +128,6 @@ function initCalendar(){
 			calendar.addEvent({ title: firebase.auth().currentUser.email, start:da,groupId:firebase.auth().currentUser.email});
 		});      
 	});//addEventListener   
-}
-
-function logout(){
-	firebase.auth().signOut();
-	window.location.replace("login.html");
 }
 
 function writeUserData(userEmail,meeting) {
