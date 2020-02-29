@@ -1,4 +1,14 @@
+var eventArray=[];
+var dataArray=[];
+
 function init(){
+	initFirebase();
+	createDataArray();
+	createEventArray();
+	initCalendar();
+}
+
+function initFirebase(){
 	//create config for initialization
 	const firebaseConfig = {
 		apiKey: "AIzaSyCrxpBSnbxGQ5Htkxsh6BLnyjxhHTvfKdM",
@@ -19,26 +29,66 @@ function init(){
 		if (!user) {    // No user is signed in.
 			window.location.replace("login.html");
 		}         
-	});
-	var database = firebase.database();
+	});	
 	
+}
+
+
+function createDataArray(){
+	var rootRef = firebase.database().ref();
+	rootRef.on('value', function(rootSnapshot) {
+		rootSnapshot.forEach(function(dateSnapshot) {
+			dateSnapshot.forEach(function(timeSnapshot) {
+				dataArray.push(timeSnapshot.val());
+			})
+		});
+	});
+}
+
+function createEventArray(){
+	for (let i = 0; i < dataArray.length-1; i+=2) {
+		eventArray.push({
+			title: dataArray[0],
+			start: dataArray[1]
+		})
+	}
+	console.log(eventArray.length);
+}
+
+function initCalendar(){
+	console.log(eventArray.length);
 	document.addEventListener('DOMContentLoaded', function() {		
-		var calendarElement = document.getElementById('calendar');		
+		var calendarElement = document.getElementById('calendar');	
+		console.log(eventArray.length);
 		var calendar = new FullCalendar.Calendar(calendarElement, {
-			plugins: [ 'interaction', 'timeGrid','bootstrap'  ],
+			
 			//set the calender properties
-			locale: 'en',		
+			plugins: [ 'interaction', 'timeGrid','bootstrap'  ],
+			eventSources:eventArray,
 			contentHeight: 600,
 			slotDuration: '00:05:00',
 			defaultTimedEventDuration: '00:15:00',
 			forceEventDuration: true,
 			minTime:'15:00:00',
 			maxTime:'20:00:00',
-			allDaySlot:false,	
+			allDaySlot:false,
 			themeSystem:'bootstrap',
 			hiddenDays: [ 5,6 ], // hide Fridays and Saturdays
+			customButtons: {
+				logoutButton: {
+					text: 'Logout',
+					click: function logout() {
+						firebase.auth().signOut();
+						window.location.replace("login.html");
+					}
+				}
+			},
+			header: {
+				left: 'logoutButton',
+				center: 'title',
+				right: 'today prev,next'
+			},
 			
-		
 			//remove event on click
 			eventClick: function(info) {
 				firebase.auth().onAuthStateChanged(function(user) {
@@ -56,23 +106,6 @@ function init(){
 			}			
 		});//calendar		
 		calendar.render();
-		
-		var localeSelectorEl = document.getElementById('locale-selector');
-		// build the locale selector's options
-		calendar.getAvailableLocaleCodes().forEach(function(localeCode) {
-			var optionEl = document.createElement('option');
-			optionEl.value = localeCode;
-			optionEl.selected = localeCode == 'en';
-			optionEl.innerText = localeCode;
-			localeSelectorEl.appendChild(optionEl);
-		});
-		
-		// when the selected option changes, dynamically change the calendar option
-		localeSelectorEl.addEventListener('change', function() {
-			if (this.value) {
-				calendar.setOption('locale', this.value);            
-			}
-		});		
 		
 		//add event on click
 		calendar.on('dateClick', function(clickedOn) {
@@ -97,10 +130,11 @@ function logout(){
 
 function writeUserData(userEmail,meeting) {
 	var name=userEmail.substring(0, userEmail.indexOf("@"));	
-	var updates = {};
-	updates[name+'/'+meeting.toDateString()+'/'+meeting.toTimeString()]= "meeting";
+	firebase.database().ref(name+' '+meeting.toString()).set({
+		title: name,
+		start: meeting.toString()
+	});
 	
-	return firebase.database().ref().update(updates);
 }
 
 function deleteUserData(userEmail,meeting){
