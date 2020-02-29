@@ -25,7 +25,7 @@ function init(){
 	document.addEventListener('DOMContentLoaded', function() {		
 		var calendarElement = document.getElementById('calendar');		
 		var calendar = new FullCalendar.Calendar(calendarElement, {
-			plugins: [ 'interaction', 'timeGrid'  ],
+			plugins: [ 'interaction', 'timeGrid','bootstrap'  ],
 			//set the calender properties
 			locale: 'en',		
 			contentHeight: 600,
@@ -34,10 +34,11 @@ function init(){
 			forceEventDuration: true,
 			minTime:'15:00:00',
 			maxTime:'20:00:00',
-			allDaySlot:false,		
+			allDaySlot:false,	
+			themeSystem:'bootstrap',
 			hiddenDays: [ 5,6 ], // hide Fridays and Saturdays
-	
 			
+		
 			//remove event on click
 			eventClick: function(info) {
 				firebase.auth().onAuthStateChanged(function(user) {
