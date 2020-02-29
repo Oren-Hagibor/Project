@@ -1,0 +1,10 @@
+////TODO////
+
+1. switch to one day display.
+2. each teacher will have his own tag at FireBase.
+3. functionllity:
+	if i'm at Robert Smith page i'll see his meeting for the day,
+	empty line meens - free spot and i can sign for that time
+	else see line as occupied.
+4. switch between teachers tags(left select box) will pull the data about the teacher's meeting 
+to displaty and fill the right hours.
