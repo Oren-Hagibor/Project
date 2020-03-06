@@ -2,35 +2,40 @@
    font-size: 16px;
    text-align: center;
    font-family: 'Nunito', sans-serif;
+ 
 } 
+
+.fc-today {
+    background: #272B30 !important;
+} 
+
+h5{
+   text-decoration: underline;
+   text-align: left;
+}
 
 .fc-time-grid .fc-slats td {  
    height: 1em;
    border-bottom: 0;
 }
 
-#top{
-   background-color:#272B30;
-   width:fit-content;		
-   padding:10px;
-}   
-
 .radio-inline{
    width:150px;
    text-align: left;
+	cursor: pointer;
 }
 
 .form-group{
    text-align: left;
 }
-h5{
-   text-decoration: underline;
-   text-align: left;
-}
+
 .down-div{
    margin-top: 80px;
    margin-left: 10px;
 }
-.radio-inline{
-   cursor: pointer;
-}
+
+
+#top{ 
+   width:fit-content;		
+   padding:10px;
+}   

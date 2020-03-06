@@ -1,12 +1,33 @@
 
-
+var calendar;
 function init(){
 	initFirebase();
-	var eventArray;
-	eventArray=createDataArray(createEventArray);
-	setTimeout(function(){ }, 3000);
-	initCalendar(eventArray);
+	var data=[];	
+	data=createdata();
+	var eventSource = {
+            id : 1,
+			events: data,
+			color: 'green'
+	}
+	setTimeout(function(){
+		stringy(data);
+	}, 2000);	
+	initCalendar(eventSource);
+	
+	setTimeout(function(){calendar.refetchEvents();}, 3000);
 }
+
+//can replace refetch:
+//newEvents.forEach(event => calendar.addEvent(event));
+
+
+//radio listener
+$(document).ready(function(){
+	$('input[type=radio]').click(function(){
+		// alert(this.value);
+	});
+});
+
 
 function initFirebase(){
 	//create config for initialization
@@ -32,55 +53,60 @@ function initFirebase(){
 	});	
 	
 }
+function stringy(obj){
+	str = JSON.stringify(obj, null, 4); // (Optional) beautiful indented output.
+	console.log(str); // Logs output to dev tools console.
+}
 
-function createDataArray(callback){
-	var dataArray=[];
-	
+function createdata(){
+	var data=[];
+	var i=0;
 	var rootRef = firebase.database().ref();
 	rootRef.on('value', function(rootSnapshot) {
-		rootSnapshot.forEach(function(dateSnapshot) {
-			dateSnapshot.forEach(function(timeSnapshot) {
-				dataArray.push(timeSnapshot.val());
-				console.log(timeSnapshot.val())
+		rootSnapshot.forEach(function(teacherSnapshot) {
+			teacherSnapshot.forEach(function(userSnapshot) {
+				//	userSnapshot.forEach(function(timeSnapshot) {
+				data.push({
+					title:   userSnapshot.val().name,
+					start: userSnapshot.val().start,
+					//description:
+				});				
 			})
 		});
+	//});
 	});
-	//setTimeout(function(){	document.write(dataArray.length); }, 12000);
-
-	callback(dataArray);
+	return data;
 }
 
-function createEventArray(...dataArray){
-	var eventArray=[];
-	for (let i = 0; i < dataArray.length-1; i+=2) {
-		eventArray.push({
-			title: dataArray[0],
-			start: dataArray[1]
-		})
+
+function getTeacherName(){
+	var names = document.getElementsByName('optradio');
+	for(var i = 0; i < names.length; i++){
+		if(names[i].checked){
+			return names[i].value;
+		}
 	}
-	console.log("in ea"+eventArray.length);
-	return eventArray;
 }
 
-function initCalendar(...eventArray){
+
+function initCalendar(eventSource){
 	document.addEventListener('DOMContentLoaded', function() {		
 		var calendarElement = document.getElementById('calendar');	
-		var calendar = new FullCalendar.Calendar(calendarElement, {
-			
+		calendar = new FullCalendar.Calendar(calendarElement, {			
 			//set the calender properties
-			plugins: [ 'interaction', 'timeGrid','bootstrap' ],
-			//eventSources:eventArray,
+			plugins: [ 'interaction','timeGrid','bootstrap' ],
+			eventSources:eventSource,
+			//events:data,
 			contentHeight: 600,
 			slotDuration: '00:05:00',
 			defaultTimedEventDuration: '00:15:00',
 			forceEventDuration: true,
+			defaultView: 'timeGridDay',
 			minTime:'15:00:00',
 			maxTime:'20:00:00',
 			allDaySlot:false,
 			themeSystem:'bootstrap',
-			hiddenDays: [ 5,6 ], // hide Fridays and Saturdays
-			titleFormat:{month:'long',year:'numeric'},
-			columnHeaderFormat:{weekday:'long',day:'2-digit',month:'2-digit'},
+			titleFormat:{month:'long',year:'numeric',day:'numeric'},
 			customButtons: {
 				logoutButton: {
 					text: 'Logout',
@@ -126,17 +152,17 @@ function initCalendar(...eventArray){
 			} 
 			writeUserData(firebase.auth().currentUser.email,da); 
 			calendar.addEvent({ title: firebase.auth().currentUser.email, start:da,groupId:firebase.auth().currentUser.email});
-		});      
+		}); 		
+		
 	});//addEventListener   
 }
 
 function writeUserData(userEmail,meeting) {
 	var name=userEmail.substring(0, userEmail.indexOf("@"));	
-	firebase.database().ref(name+' '+meeting.toString()).set({
-		title: name,
+	firebase.database().ref(getTeacherName()+'/'+name+' '+meeting.toString()).set({
+		name: name,
 		start: meeting.toString()
 	});
-	
 }
 
 function deleteUserData(userEmail,meeting){

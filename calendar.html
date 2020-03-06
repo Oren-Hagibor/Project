@@ -6,10 +6,12 @@
 	<link href='calendar/packages/core/main.css' rel='stylesheet' />
 	<link href='calendar/packages/timegrid/main.css' rel='stylesheet' />
 	<link href='calendar/packages/bootstrap/main.css' rel='stylesheet' />
+	<link href='calendar/packages/daygrid/main.css' rel='stylesheet' />
 	<link href='css/calendar.css' rel='stylesheet' />
 	<link href='https://use.fontawesome.com/releases/v5.0.6/css/all.css' rel='stylesheet'>
 	<link href='https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/slate/bootstrap.min.css' rel='stylesheet'>
-
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src='js/calendar.js'></script>
 	<script src='calendar/packages/core/main.js'></script>
 	<script src='calendar/packages/core/locales/he.js'></script>
@@ -34,15 +36,15 @@
 	<div class="d-flex bd-highlight">
 		<div class="form-group down-div position-static">
 			<h5>Teacher name</h5>
-			<label class="radio-inline float-left"><input type="radio" name="optradio" checked> Robert Smith</label>
-			<label class="radio-inline float-left"><input type="radio" name="optradio" id="MG"> Maria Garcia</label>
-			<label class="radio-inline float-left"><input type="radio" name="optradio" id="DS"> David Smith</label>
-			<label class="radio-inline float-left"><input type="radio" name="optradio" id="MR"> Maria Rodriguez</label>
-			<label class="radio-inline float-left"><input type="radio" name="optradio" id="MS"> Mary Smith</label>
-			<label class="radio-inline float-left"><input type="radio" name="optradio" id="BH"> Brown Hernandez</label>
-			<label class="radio-inline float-left"><input type="radio" name="optradio" id="JJ"> James Johnson</label>
-			<label class="radio-inline float-left"><input type="radio" name="optradio" id="WT"> Wilson Thomas</label>
-			<label class="radio-inline float-left"><input type="radio" name="optradio" id="RN"> Raz Niv</label>
+			<label class="radio-inline float-left"><input type="radio" name="optradio" value="RS" checked> Robert Smith</label>
+			<label class="radio-inline float-left"><input type="radio" name="optradio" value="MG"> Maria Garcia</label>
+			<label class="radio-inline float-left"><input type="radio" name="optradio" value="DS"> David Smith</label>
+			<label class="radio-inline float-left"><input type="radio" name="optradio" value="MR"> Maria Rodriguez</label>
+			<label class="radio-inline float-left"><input type="radio" name="optradio" value="MS"> Mary Smith</label>
+			<label class="radio-inline float-left"><input type="radio" name="optradio" value="BH"> Brown Hernandez</label>
+			<label class="radio-inline float-left"><input type="radio" name="optradio" value="JJ"> James Johnson</label>
+			<label class="radio-inline float-left"><input type="radio" name="optradio" value="WT"> Wilson Thomas</label>
+			<label class="radio-inline float-left"><input type="radio" name="optradio" value="RN"> Raz Niv</label>
 		</div>
 		<div id='calendar' class="p-2 flex-grow-1 bd-highlight"></div>
 	</div>
